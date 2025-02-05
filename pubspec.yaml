@@ -40,6 +40,7 @@ dependencies:
   intl: ^0.20.2
   equatable: ^2.0.7
   skeletonizer: ^1.4.3
+  sqflite: ^2.4.1
 
 dev_dependencies:
   flutter_test:
