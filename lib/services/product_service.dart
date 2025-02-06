@@ -11,6 +11,7 @@ class ProductService {
     int page = 1,
     int pageSize = 10,
   }) async {
+
     return await callApi().then(
       (_) {
         return List.generate(
@@ -18,9 +19,9 @@ class ProductService {
           (index) {
             return Product(
               id: page + index,
-              name: 'Product $index',
-              image: 'assets/images/product_$index.png',
-              price: index.toDouble() * 10000,
+              name: 'Product #$index',
+              image: 'assets/images/product_$index.jpg',
+              price: page * 10000 + index.toDouble() * 10000,
             );
           },
         );
@@ -36,8 +37,8 @@ class ProductService {
           (index) {
             return Product(
               id: index,
-              name: 'Hot Product $index',
-              image: 'assets/images/product_$index.png',
+              name: 'Product #$index',
+              image: 'assets/images/product_$index.jpg',
               price: 100 + index.toDouble() * 10000,
             );
           },

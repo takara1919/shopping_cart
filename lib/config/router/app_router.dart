@@ -6,7 +6,7 @@ import '../../features/home/view/home_screen.dart';
 import '../../features/splash/view/splash_screen.dart';
 
 final appRouter = GoRouter(
-  initialLocation: RouteNames.splash,
+  initialLocation: RouteNames.home,
   routes: [
     GoRoute(
       path: RouteNames.splash,

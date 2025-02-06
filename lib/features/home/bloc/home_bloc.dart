@@ -10,17 +10,16 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  static const _pageSize = 10;
   final ProductService _productService;
 
-  HomeBloc(ProductService? service) : _productService = ProductService(), super(const HomeState()) {
+  HomeBloc({ProductService? service}) : _productService = ProductService(), super(const HomeState()) {
     on<LoadProducts>(_onLoadProducts);
     on<LoadMoreProducts>(_onLoadMoreProducts);
   }
 
   Future<void> _onLoadProducts(LoadProducts event, Emitter<HomeState> emit) async {
     try {
-      emit(state.copyWith(
+      emit(const HomeState(
         isLoadingHotProducts: true,
         isLoadingAllProducts: true,
         error: null,
@@ -32,7 +31,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         isLoadingHotProducts: false,
       ));
 
-      final allProducts = await _productService.getProducts(page: 1);
+      final allProducts = await _productService.getProducts(page: 0);
 
       emit(state.copyWith(
         allProducts: allProducts,
@@ -49,11 +48,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> _onLoadMoreProducts(LoadMoreProducts event, Emitter<HomeState> emit) async {
     try {
-      final allProducts = await _productService.getProducts(page: event.page);
       emit(state.copyWith(
-        allProducts: [...state.allProducts, ...allProducts],
-        hasReachedMax: allProducts.length < _pageSize,
+        isLoadingAllProducts: true,
       ));
+      final allProducts = await _productService.getProducts(page: event.page, pageSize: event.size);
+      emit(state.copyWith(
+        allProducts: [...state.allProducts, ...allProducts,],
+        isLoadingAllProducts: false,
+      ));
+      if(allProducts.length < event.size) {
+        emit(state.copyWith(
+          hasReachedMax: true,
+        ));
+      }
     } catch (e) {
       emit(state.copyWith(
         error: e.toString(),

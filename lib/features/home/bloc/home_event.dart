@@ -14,11 +14,13 @@ class LoadProducts extends HomeEvent {
 class LoadMoreProducts extends HomeEvent {
   const LoadMoreProducts({
     required this.page,
+    required this.size,
   });
 
   final int page;
+  final int size;
 
   @override
-  List<Object?> get props => [page];
+  List<Object?> get props => [page, size];
 }
 
